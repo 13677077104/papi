@@ -22,6 +22,4 @@ plugins/*.zip
 node_modules
 package-lock.json
 
-.env
-
 
