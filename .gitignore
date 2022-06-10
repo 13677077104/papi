@@ -3,7 +3,7 @@ vendor/
 runtime/*
 
 public/docs
-
+public/pull.php
 public/uploads
 
 gitc
