@@ -52,4 +52,18 @@ return array(
          */
         'routes' => $routes,
     ),
+
+    'cors' => array(
+        //域名白名单
+        'whitelist' => array(
+            'http://localhost/',
+            'https://open.weixin.qq.com',
+            //'http://xxx.xxx.xxx'
+        ),
+        //header头
+        'headers' => array(
+            'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS', //支持的请求类型
+            'Access-Control-Allow-Credentials' => 'true' //支持cookie
+        )
+    )
 );

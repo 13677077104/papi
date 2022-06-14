@@ -24,6 +24,7 @@
 		"vlucas/phpdotenv": "5.4.x-dev",
 		"overtrue/wechat": "~4.0",
 		"phalapi/fast-route": "dev-master",
+		"phalapi/cors":"dev-master",
       	"ext-json": "*"
     },
 	"autoload" : {

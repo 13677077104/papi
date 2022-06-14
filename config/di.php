@@ -8,7 +8,7 @@
  */
 
 use PhalApi\Config\FileConfig;
-use PhalApi\Logger;
+use PhalApi\CORS\Lite;
 use PhalApi\Logger\FileLogger;
 use PhalApi\Database\NotORMDatabase;
 use PhalApi\Error\ApiError;
@@ -44,6 +44,8 @@ $di->error = new ApiError();
 
 // portal后台管理员，如果不需要portal后台可注释
 $di->admin = new Portal\Common\Admin();
+
+$di->cors = new Lite();
 
 /** ---------------- 第三应用 服务注册 ---------------- **/
 
