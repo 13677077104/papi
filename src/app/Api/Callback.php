@@ -2,6 +2,7 @@
 
 namespace App\Api;
 
+use App\Api\Examples\Log;
 use PhalApi\Api;
 
 
@@ -14,19 +15,18 @@ class Callback extends Api
             'code' => array(
                 'code' => array('name' => 'code', 'default' => '', 'desc' => 'code'),
                 'state' => array('name' => 'state', 'default' => 'STATE', 'desc' => 'state'),
+                'echostr' => array('name' => 'echostr', 'default' => '', 'desc' => 'echostr'),
             ),
         );
     }
 
-    public function code(): array
+    public function code()
     {
         $code = $this->code;
         $state = $this->state;
-
-        return [
-            'c' => $code,
-            's' => $state
-        ];
-
+        $echostr = $this->echostr;
+        logData($_GET);
+        echo $echostr;
+        exit();
     }
 }

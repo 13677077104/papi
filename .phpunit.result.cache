@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Api\\Login\\WechatTest::testGetRedirectUrl":4},"times":{"Api\\Login\\WechatTest::testGetRedirectUrl":0.183}}

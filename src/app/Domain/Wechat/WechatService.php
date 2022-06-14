@@ -6,7 +6,7 @@ use EasyWeChat\Factory;
 
 
 
-class Wechat
+class WechatService
 {
     private $app;
     public function __construct()
@@ -16,10 +16,8 @@ class Wechat
     }
 
 
-    public function getToken()
+    public function getRedirectUrl(): ?string
     {
-        println($this->app->oauth->scopes(['snsapi_userinfo'])
-            ->redirect());
-
+        return $this->app->oauth->scopes(['snsapi_userinfo'])->redirect();
     }
 }
