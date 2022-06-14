@@ -32,9 +32,9 @@ return array(
     ),
 
     'wechat_config' => [
-        'app_id' => 'wx43752d2a1be56fe4',
-        'secret' => '470b9c08434ce1d3b6b722f7e4922323',
-        'token' => 'TestToken',
+        'app_id' => $_ENV['WECHAT_APP_ID'] ?? null, # 'wx43752d2a1be56fe4',
+        'secret' => $_ENV['WECHAT_SECRET'] ?? null, #'470b9c08434ce1d3b6b722f7e4922323',
+        'token' => $_ENV['WECHAT_TOKEN'] ?? null,
         'response_type' => 'array',
         'log' => [
             'level' => 'debug',
