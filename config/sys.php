@@ -68,7 +68,7 @@ return array(
      */
     'response' => array(
         'structure_map' => array( // 返回结构字段映射配置
-            'ret'   => 'ret',
+            'ret'   => 'code',
             'data'  => 'data',
             'msg'   => 'msg',
             'debug' => 'debug',

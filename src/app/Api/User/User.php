@@ -35,7 +35,14 @@ class User extends Api {
             ),
         );
     }
-    
+
+    public function code()
+    {
+        return [
+            'code' => 'success'
+        ];
+    }
+
     /**
      * 注册账号
      * @desc 注册一个新账号

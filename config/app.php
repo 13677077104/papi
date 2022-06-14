@@ -7,6 +7,8 @@
  * @author dogstar <chanzonghuang@gmail.com> 2017-07-13
  */
 
+$routes = require 'routes.php';
+
 return array(
 
     /**
@@ -28,5 +30,26 @@ return array(
     'service_whitelist' => array(
         'Site.Index',
     ),
-    
+
+    'wechat_config' => [
+        'app_id' => 'wx43752d2a1be56fe4',
+        'secret' => '470b9c08434ce1d3b6b722f7e4922323',
+        'token' => 'TestToken',
+        'response_type' => 'array',
+        'log' => [
+            'level' => 'debug',
+            'file' => API_ROOT . '/runtime/log/wechat.log',
+        ],
+    ],
+
+    'FastRoute' => array(
+        /**
+         * 格式：array($method, $routePattern, $handler)
+         *
+         * @param string/array $method 允许的HTTP请求方式，可以为：GET/POST/HEAD/DELETE 等
+         * @param string $routePattern 路由的正则表达式
+         * @param string $handler 对应PhalApi中接口服务名称，即：?service=$handler
+         */
+        'routes' => $routes,
+    ),
 );
