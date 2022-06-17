@@ -20,11 +20,13 @@ class WechatService
         ];
 
         $this->app = Factory::officialAccount($config);
+
     }
 
     public function getOpenId($code)
     {
-        $res = $this->app->oauth->
+        $res = $this->app->oauth->getRequest()->getc;
+
         println($res);die();
     }
 

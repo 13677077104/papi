@@ -3,7 +3,10 @@
 namespace App\Api\Login;
 
 use App\Common\Exception\CustomException;
+use App\Common\Redis;
+use App\Common\RedisService;
 use App\Domain\User\UserService;
+use EasyWeChat\Factory;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use PhalApi\Api;
@@ -40,7 +43,6 @@ class Wechat extends Api
     /**
      * @desc step 2 get access_token & openid
      * @throws CustomException
-     * @throws GuzzleException
      */
     public function getUserInfo(): array
     {
@@ -54,7 +56,11 @@ class Wechat extends Api
         ];
 
         $client = new Client();
-        $res = $client->request('GET', $uri, ['query' => $queryParams]);
+        try {
+            $res = $client->request('GET', $uri, ['query' => $queryParams]);
+        } catch (GuzzleException $e) {
+            throw new CustomException($e->getMessage());
+        }
         $content = $res->getBody()->getContents();
         $content = json_decode($content, true);
         $errCode = $content['errcode'] ?? null;
@@ -74,6 +80,50 @@ class Wechat extends Api
             'expires_in' => $expiresIn,
             'openid' => $openid,
         ];
+    }
+
+// -------------------------------------------------------------------------
+    // test
+    public function getUserId(): array
+    {
+        $defaultConfig = config('app.wechat_config');
+        $defaultConfig = array_merge($defaultConfig, [
+            'oauth' => [
+                'scopes'   => ['snsapi_base'],
+                'callback' => '/user/bb',
+            ]
+        ]);
+
+        $app = Factory::officialAccount($defaultConfig);
+        $oauth = $app->oauth;
+
+        $key = 'who';
+        $redis = RedisService::getInstance();
+
+        if (!$redis->get($key)) {
+            $oauth->redirect()->send();
+        }
+        return [
+            'user_id' => 1,
+        ];
+    }
+
+    public function bb()
+    {
+        ini_set('display_errors', 1);
+        $config = [
+            'oauth' => [
+                'scopes'   => ['snsapi_base'],
+                'callback' => '/oauth_callback',
+            ],
+        ];
+        $app = Factory::officialAccount($config);
+        $oauth = $app->oauth;
+
+        // 获取 OAuth 授权结果用户信息
+        $user = $oauth->user();
+        logData($user->toArray());
+        header('location:/user/id');
     }
 
 }

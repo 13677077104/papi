@@ -38,6 +38,7 @@ return array(
         'response_type' => 'array',
         'log' => [
             'level' => 'debug',
+            'permission' => '0777',
             'file' => API_ROOT . '/runtime/log/wechat.log',
         ],
     ],
