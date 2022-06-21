@@ -53,8 +53,8 @@ class Wechat extends Api
             throw new CustomException($e->getMessage());
         }
         $queryString = http_build_query([
-            'user_id' => $id,
             'openid' => $openid,
+            'access_token' => JwtService::getToken($id),
         ]);
         header('location:/test.html?' . $queryString);
     }
