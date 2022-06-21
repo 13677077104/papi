@@ -16,6 +16,9 @@ class WechatService
 
     public function getRedirectUrl($scopes = 'snsapi_base'): string
     {
+        if (!in_array($scopes, ['snsapi_base', 'snsapi_userinfo'])) {
+            $scopes = 'snsapi_base';
+        }
         $callback = '/oauth/callback';
         $config = array_merge($this->config, [
             'oauth' => [
