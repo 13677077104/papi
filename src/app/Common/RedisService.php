@@ -6,22 +6,28 @@
 
 namespace App\Common;
 
-
-use Exception;
+use PhalApi\Exception;
 use Redis;
 
 class RedisService
 {
     private static $_instance;
+    public $redis;
     private $host;
     private $auth;
     private $db;
     private $port;
     private $timeout;
-    public $redis;
 
+    /**
+     * @throws Exception
+     */
     private function __construct()
     {
+        if (!class_exists('Redis')) {
+            throw new Exception('redis not install!');
+        }
+
         $conf = config('sys.redis');
         $this->host = $conf['host'] ?? 'localhost';
         $this->db = $conf['db'] ?? 0;
@@ -30,7 +36,7 @@ class RedisService
 
         $this->redis = new Redis();
         $result = $this->redis->connect($this->host, $this->port, $this->timeout);
-        if(!$result){
+        if (!$result) {
             throw new Exception('redis connect fail');
         }
 
@@ -44,8 +50,9 @@ class RedisService
     }
 
 
-    public static function getInstance(){
-        if(is_null(self::$_instance) || empty(self::$_instance)){
+    public static function getInstance(): RedisService
+    {
+        if (is_null(self::$_instance) || empty(self::$_instance)) {
             self::$_instance = new self();
         }
         return self::$_instance;

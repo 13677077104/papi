@@ -11,21 +11,18 @@
 <div style="text-align: center;">
   <h3>login</h3>
 </div>
-<!--suppress JSUnresolvedLibraryURL -->
-<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="./static/jquery.min.js"></script>
 <script>
   $(function(){
     $.ajax({
-      url:'/oauth/login',
+      url:'/oauth/get-redirect-url',
       method:"get",
       success: function (res){
         if(res.code === 200){
           let data = res.data;
           location.href = data.redirect_url
         }
-        console.log()
       }
-
     })
   });
 

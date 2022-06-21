@@ -5,29 +5,26 @@ namespace App\Domain\Wechat;
 use EasyWeChat\Factory;
 
 
-
 class WechatService
 {
-    private $app;
+    private $config;
+
     public function __construct()
     {
-        $config = config('app.wechat_config');
-        $config += [
-            'oauth' => [
-                'scopes'   => ['snsapi_userinfo'],
-                'callback' => '/code',
-            ]
-        ];
-
-        $this->app = Factory::officialAccount($config);
-
+        $this->config = config('app.wechat_config');
     }
 
-    public function getOpenId($code)
+    public function getRedirectUrl(): string
     {
-        $res = $this->app->oauth->getRequest()->getc;
-
-        println($res);die();
+        $callback = '/oauth/callback';
+        $config = array_merge($this->config, [
+            'oauth' => [
+                'scopes' => ['snsapi_base'],
+                'callback' => $callback,
+            ],
+        ]);
+        $oauth = Factory::officialAccount($config)->oauth;
+        return $oauth->redirect()->getTargetUrl();
     }
 
 }
