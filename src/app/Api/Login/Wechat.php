@@ -2,8 +2,11 @@
 
 namespace App\Api\Login;
 
+use App\Common\Exception\CustomException;
+use App\Domain\User\UserService;
 use App\Domain\Wechat\WechatService;
 use EasyWeChat\Factory;
+use Exception;
 use PhalApi\Api;
 
 class Wechat extends Api
@@ -28,34 +31,27 @@ class Wechat extends Api
 
     /**
      * @desc step 2 授权成功，微信跳转回来接口
+     * @throws CustomException
      */
     public function callback()
     {
         $config = config('app.wechat_config');
-        $oauth = Factory::officialAccount($config)->oauth;
-
-        // 获取 OAuth 授权结果用户信息
-        $user = $oauth->user();
-        logData($user);
-        header('location:/test.html');
-
-        /*
-        if ($errCode) {
-            throw new CustomException($content['errmsg']);
+        try {// 获取 OAuth 授权结果用户信息
+            $oauth = Factory::officialAccount($config)->oauth;
+            $user = $oauth->user();
+            $openid = $user->getId();
+            $srv = new UserService();
+            $id = $srv->createData([
+                'openid' => $openid,
+            ]);
+        } catch (Exception $e) {
+            throw new CustomException($e->getMessage());
         }
-        $openid = $content['openid'];
-        $accessToken = $content['access_token'];
-        $expiresIn = time() + $content['expires_in'];
-        $srv = new UserService();
-        $id = $srv->createData([
+        $queryString = http_build_query([
+            'user_id' => $id,
             'openid' => $openid,
         ]);
-        return [
-            'user_id' => $id,
-            'access_token' => $accessToken,
-            'expires_in' => $expiresIn,
-            'openid' => $openid,
-        ];*/
+        header('location:/test.html?' . $queryString);
     }
 
 }

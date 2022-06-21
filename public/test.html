@@ -14,18 +14,33 @@
 <script src="./static/jquery.min.js"></script>
 <script>
   $(function(){
-    $.ajax({
-      url:'/oauth/get-redirect-url',
-      method:"get",
-      success: function (res){
-        if(res.code === 200){
-          let data = res.data;
-          location.href = data.redirect_url
+    let userid = getUrlParam('user_id');
+    let openid = getUrlParam('openid');
+    if (userid && openid) {
+      window.localStorage.setItem('user_id', userid)
+      window.localStorage.setItem('openid', openid)
+    }else{
+      $.ajax({
+        url:'/oauth/get-redirect-url',
+        method:"get",
+        success: function (res){
+          if(res.code === 200){
+            let data = res.data;
+            location.href = data.redirect_url
+          }
         }
-      }
-    })
+      })
+    }
   });
 
+  function getUrlParam(name) {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    let r = window.location.search.substring(1).match(reg);  //匹配目标参数
+    if (r != null) {
+      return decodeURI(r[2]);
+    }
+    return null; //返回参数值
+  }
 </script>
 </body>
 </html>
