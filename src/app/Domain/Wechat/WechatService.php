@@ -14,12 +14,12 @@ class WechatService
         $this->config = config('app.wechat_config');
     }
 
-    public function getRedirectUrl(): string
+    public function getRedirectUrl($scopes = 'snsapi_base'): string
     {
         $callback = '/oauth/callback';
         $config = array_merge($this->config, [
             'oauth' => [
-                'scopes' => ['snsapi_base'],
+                'scopes' => [$scopes],
                 'callback' => $callback,
             ],
         ]);

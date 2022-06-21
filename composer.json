@@ -25,7 +25,8 @@
 		"overtrue/wechat": "~4.0",
 		"phalapi/fast-route": "dev-master",
 		"phalapi/cors":"dev-master",
-      	"ext-json": "*"
+      	"ext-json": "*",
+		"firebase/php-jwt": "dev-main"
     },
 	"autoload" : {
 		"files" : [

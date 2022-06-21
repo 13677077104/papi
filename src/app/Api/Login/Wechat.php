@@ -3,6 +3,7 @@
 namespace App\Api\Login;
 
 use App\Common\Exception\CustomException;
+use App\Common\JwtService;
 use App\Domain\User\UserService;
 use App\Domain\Wechat\WechatService;
 use EasyWeChat\Factory;
@@ -14,8 +15,8 @@ class Wechat extends Api
     public function getRules(): array
     {
         return array(
-            'getUserInfo' => array(
-                'code' => array('name' => 'code', 'default' => '', 'desc' => 'code'),
+            'getRedirectUrl' => array(
+                'scopes' => array('name' => 'scopes', 'default' => 'snsapi_base', 'desc' => 'scopes'),
             ),
         );
     }
@@ -23,7 +24,7 @@ class Wechat extends Api
     // step 1 获取跳转微信授权接口
     public function getRedirectUrl(): array
     {
-        $url = (new WechatService())->getRedirectUrl();
+        $url = (new WechatService())->getRedirectUrl($this->scopes);
         return [
             'redirect_url' => $url,
         ];
@@ -36,14 +37,18 @@ class Wechat extends Api
     public function callback()
     {
         $config = config('app.wechat_config');
-        try {// 获取 OAuth 授权结果用户信息
+        try {
+            // 获取 OAuth 授权结果用户信息
             $oauth = Factory::officialAccount($config)->oauth;
             $user = $oauth->user();
             $openid = $user->getId();
             $srv = new UserService();
             $id = $srv->createData([
                 'openid' => $openid,
+                'nickname' => $user->getNickname(),
+                'avatar' => $user->getAvatar(),
             ]);
+
         } catch (Exception $e) {
             throw new CustomException($e->getMessage());
         }
@@ -54,4 +59,11 @@ class Wechat extends Api
         header('location:/test.html?' . $queryString);
     }
 
+    public function getToken()
+    {
+        $token = JwtService::getToken(6);
+        return [
+            'access_token' => $token
+        ];
+    }
 }

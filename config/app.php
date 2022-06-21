@@ -66,5 +66,10 @@ return array(
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS', //支持的请求类型
             'Access-Control-Allow-Credentials' => 'true' //支持cookie
         )
-    )
+    ),
+
+    'jwt' => [
+        'key' => $_ENV['JWT_KEY'] ?? null,
+        'expire_time' => 30 * 60, // token 的有效期
+    ]
 );
