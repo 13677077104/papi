@@ -14,10 +14,10 @@
 <script src="./static/jquery.min.js"></script>
 <script>
   $(function(){
-    let userid = getUrlParam('user_id');
+    let access_token = getUrlParam('access_token');
     let openid = getUrlParam('openid');
-    if (userid && openid) {
-      window.localStorage.setItem('user_id', userid)
+    if (access_token && openid) {
+      window.localStorage.setItem('access_token', access_token)
       window.localStorage.setItem('openid', openid)
     }else{
       $.ajax({
