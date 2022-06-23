@@ -13,23 +13,43 @@ use PhalApi\Api;
 class Controller extends Api
 {
     protected $userId;
+
     /**
      * @description 校验access_token 设置全局user_id
      * @throws InvalidArgumentException
      */
     public function userCheck()
     {
-        $token = $_GET['access_token'] ?? null;
-        if (!$token) {
-            throw new InvalidArgumentException("access_token can not blank", 1000);
+        if (!$this->inWhitelistIp()) {
+            $token = $_GET['access_token'] ?? null;
+            if (!$token) {
+                throw new InvalidArgumentException("access_token can not blank", 1000);
+            }
+
+            try {
+                $info = JwtService::decode($token);
+            } catch (Exception $e) {
+                throw new InvalidArgumentException($e->getMessage(), $e->getCode());
+            }
+
+            $this->userId = $info['user_id'];
         }
 
-        try {
-            $info = JwtService::decode($token);
-        } catch (Exception $e) {
-            throw new InvalidArgumentException($e->getMessage(), $e->getCode());
-        }
-
-        $this->userId = $info['user_id'];
     }
+
+    public function inWhitelistIp(): bool
+    {
+        $ip = getClientIp();
+        $whitelistIp = [
+            '127.0.0.1',
+            'localhost',
+            'mp.zane.com',
+        ];
+        if (in_array($ip, $whitelistIp)) {
+            return true;
+        }
+        return false;
+    }
+
+
 }
