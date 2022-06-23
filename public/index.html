@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>baby week</title>
+</head>
+<style>#main{text-align: center}</style>
+<body>
+<div id="main">
+    <p>当前时间：<span class="current_time"></span></p>
+    <p>当前周为：第<span class="current_week"></span>周， 第<span class="week_day"></span>天</p>
+    <p>已经 <span class="total_day"></span> 天啦！</p>
+</div>
+
+<script src="./static/jquery.min.js"></script>
+<script>
+    function setCurrentTime(access_token) {
+        $.ajax({
+            url: '/baby/get-week?access_token=' + access_token,
+            method: "get",
+            success: function (res) {
+                if (res.code === 200) {
+                    let data = res.data;
+                    // $('#main .current_time').text(data.time)
+                    $('#main .current_week').text(data["week"])
+                    $('#main .week_day').text(data["day"])
+                    $('#main .total_day').text(data["duration"])
+                    $('#main').fadeIn(500)
+                }
+            }
+        })
+    }
+
+    $(function () {
+        setInterval(function() {
+            let now = (new Date()).toLocaleString();
+            $('.current_time').text(now);
+        }, 1000);
+
+        $('#main').hide()
+        let access_token = getUrlParam('access_token');
+        let openid = getUrlParam('openid');
+        if (access_token && openid) {
+            window.localStorage.setItem('access_token', access_token)
+            window.localStorage.setItem('openid', openid)
+            setCurrentTime(access_token)
+        } else {
+            $.ajax({
+                url: '/oauth/get-redirect-url',
+                method: "get",
+                success: function (res) {
+                    if (res.code === 200) {
+                        let data = res.data;
+                        location.href = data["redirect_url"]
+                    }
+                }
+            })
+        }
+    });
+
+    function getUrlParam(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        let r = window.location.search.substring(1).match(reg);  //匹配目标参数
+        if (r != null) {
+            return decodeURI(r[2]);
+        }
+        return null; //返回参数值
+    }
+</script>
+</body>
+</html>
