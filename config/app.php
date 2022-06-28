@@ -43,6 +43,17 @@ return array(
         ],
     ],
 
+    'applet_config' => [
+        'app_id' => $_ENV['APPLET_APP_ID'] ?? null,
+        'secret' => $_ENV['APPLET_SECRET'] ?? null,
+        'response_type' => 'array',
+        'log' => [
+            'level' => 'debug',
+            'permission' => '0777',
+            'file' => API_ROOT . '/runtime/log/applet.log',
+        ],
+    ],
+
     'FastRoute' => array(
         /**
          * 格式：array($method, $routePattern, $handler)

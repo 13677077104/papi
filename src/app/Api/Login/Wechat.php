@@ -47,6 +47,7 @@ class Wechat extends Api
                 'openid' => $openid,
                 'nickname' => $user->getNickname(),
                 'avatar' => $user->getAvatar(),
+                'source' => 1,
             ]);
 
         } catch (Exception $e) {
