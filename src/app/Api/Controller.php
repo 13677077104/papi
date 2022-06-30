@@ -20,12 +20,13 @@ class Controller extends Api
      */
     public function userCheck()
     {
+        $auth = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        $token = explode(' ', $auth)[1];
+
         if (!$this->inWhitelistIp()) {
-            $token = $_GET['access_token'] ?? null;
             if (!$token) {
                 throw new InvalidArgumentException("access_token can not blank", 1000);
             }
-
             try {
                 $info = JwtService::decode($token);
             } catch (Exception $e) {
@@ -41,7 +42,6 @@ class Controller extends Api
     {
         $ip = getClientIp();
         $whitelistIp = [
-            '127.0.0.1',
             'localhost',
             'mp.zane.com',
         ];

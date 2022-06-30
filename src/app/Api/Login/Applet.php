@@ -17,7 +17,7 @@ class Applet extends Api
     public function getRules(): array
     {
         return array(
-            'getUser' => array(
+            'getAccessToken' => array(
                 'code' => array('name' => 'code', 'require' => true, 'desc' => 'code'),
             ),
         );
